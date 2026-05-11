@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Canto Verde Bistrô</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cinzel:wght@400;500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   RESET & TOKENS
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+:root {
+  --gd: #1A4228;   /* green dark */
+  --g:  #2A6038;   /* green */
+  --gm: #3A7A4A;   /* green mid */
+  --gl: #EDF4EF;   /* green light bg */
+  --gu: #F4F9F5;   /* green ultra light */
+  --go: #2D9E5F;   /* green ok */
+  --gold: #C9A84C;
+  --gold-l: #E0C06A;
+  --gold-p: #FAF5E8;
+  --cr:  #F7F2E8;   /* cream */
+  --cr2: #EDE6D4;
+  --ch:  #1C2B20;   /* charcoal */
+  --tx:  #2A3D2E;   /* text */
+  --mu:  #6B7D6E;   /* muted */
+  --bd:  rgba(42,96,56,.16);  /* border */
+  --bg:  rgba(201,168,76,.22);  /* border gold */
+  --wa:  #25D366;   /* whatsapp */
+  --rd:  #8B1A1A;   /* red */
+  --or:  #C76B1A;   /* orange */
+}
+
+body {
+  background: var(--cr);
+  color: var(--tx);
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================
+   SCREENS
+   ============================================================ */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: block; }
+#adminScreen.active { display: flex; flex-direction: column; }
+#loginScreen.active { display: flex; }
+
+/* ============================================================
+   LOGIN
+   ============================================================ */
+#loginScreen {
+  align-items: center;
+  justify-content: center;
+  background: var(--gd);
+  min-height: 100vh;
+}
+.login-wrap {
+  background: var(--cr);
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  border-top: 3px solid var(--gold);
+  padding: 52px 40px 44px;
+  text-align: center;
+  box-shadow: 0 32px 80px rgba(0,0,0,.45);
+  animation: fadeUp .5s ease;
+}
+.login-badge {
+  width: 72px; height: 72px;
+  background: var(--g);
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+}
+.login-badge span { font-family: 'Cinzel', serif; font-size: 7px; color: var(--gold); letter-spacing: .1em; text-align: center; line-height: 1.4; }
+.login-title { font-family: 'Cinzel', serif; font-size: 17px; letter-spacing: .2em; color: var(--gd); margin-bottom: 4px; }
+.login-sub { font-size: 9px; letter-spacing: .3em; text-transform: uppercase; color: var(--mu); margin-bottom: 32px; }
+.login-lbl { display: block; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--mu); margin-bottom: 6px; text-align: left; }
+.login-inp {
+  width: 100%; border: 1px solid var(--bd); padding: 13px 14px;
+  font-family: 'Lato', sans-serif; font-size: 14px; color: var(--tx);
+  background: var(--gu); margin-bottom: 13px; outline: none;
+  transition: border-color .25s; border-radius: 0; -webkit-appearance: none;
+}
+.login-inp:focus { border-color: var(--g); }
+.login-btn {
+  width: 100%; font-family: 'Cinzel', serif; font-size: 11px;
+  letter-spacing: .22em; text-transform: uppercase;
+  background: var(--g); color: var(--cr); border: none;
+  padding: 15px; cursor: pointer; transition: background .25s;
+  margin-top: 4px; border-radius: 0; -webkit-appearance: none;
+}
+.login-btn:hover { background: var(--gm); }
+.login-btn:disabled { opacity: .5; cursor: wait; }
+.login-err { font-size: 12px; color: #c0392b; margin-top: 10px; display: none; padding: 9px 12px; background: #fee; border: 1px solid #fcc; line-height: 1.5; }
+.login-goto { margin-top: 22px; font-size: 10px; color: var(--mu); cursor: pointer; letter-spacing: .1em; transition: color .25s; }
+.login-goto:hover { color: var(--g); }
+
+/* ============================================================
+   CLIENT SITE
+   ============================================================ */
+/* NAV */
+.c-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  background: rgba(247,242,232,.96);
+  border-bottom: 1px solid var(--bg);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 24px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.c-brand { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.c-circle {
+  width: 40px; height: 40px; background: var(--g);
+  border-radius: 50%; border: 1.5px solid var(--gold);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.c-circle span { font-family: 'Cinzel', serif; font-size: 5.5px; color: var(--gold); letter-spacing: .1em; text-align: center; line-height: 1.3; }
+.c-name { font-family: 'Cinzel', serif; font-size: 15px; letter-spacing: .18em; color: var(--gd); }
+.c-tag { font-size: 7.5px; letter-spacing: .25em; text-transform: uppercase; color: var(--mu); margin-top: 1px; }
+.c-btn {
+  font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--cr); background: var(--g);
+  border: none; padding: 10px 18px; cursor: pointer;
+  transition: background .25s; border-radius: 0; -webkit-appearance: none;
+}
+.c-btn:hover { background: var(--gm); }
+
+/* AVISO */
+.aviso-bar { background: var(--ch); color: var(--cr); padding: 9px 24px; text-align: center; font-family: 'Cormorant Garamond', serif; font-size: 14px; font-style: italic; display: none; }
+.aviso-bar.show { display: block; }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  background: linear-gradient(148deg, var(--gd) 0%, var(--g) 52%, var(--gm) 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 110px 24px 72px; position: relative; overflow: hidden;
+}
+.hero-dots {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image: radial-gradient(circle, rgba(201,168,76,.055) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+.hero-glow {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  width: 520px; height: 520px; pointer-events: none;
+  background: radial-gradient(circle, rgba(201,168,76,.07) 0%, transparent 68%);
+}
+.hero-logo {
+  width: 118px; height: 118px; background: var(--gd);
+  border-radius: 50%; border: 2px solid var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 28px; position: relative; z-index: 2;
+  opacity: 0; animation: fadeUp 1s .15s ease forwards;
+}
+.logo-frame { border: 1.5px solid var(--gold); padding: 8px 12px; position: relative; text-align: center; }
+.logo-frame::before, .logo-frame::after {
+  content: ''; position: absolute; width: 7px; height: 7px;
+  background: var(--gd); border: 1.5px solid var(--gold); border-radius: 50%;
+  top: 50%; transform: translateY(-50%);
+}
+.logo-frame::before { left: -4px; } .logo-frame::after { right: -4px; }
+.logo-n { font-family: 'Cormorant Garamond', serif; font-size: 14px; color: var(--gold); letter-spacing: .06em; display: block; line-height: 1.1; }
+.logo-b { font-family: 'Lato', sans-serif; font-size: 7px; letter-spacing: .28em; text-transform: uppercase; color: var(--gold-l); margin-top: 3px; display: block; }
+.hero-eye { font-size: 9px; letter-spacing: .38em; text-transform: uppercase; color: var(--gold); margin-bottom: 13px; position: relative; z-index: 2; opacity: 0; animation: fadeUp 1s .35s ease forwards; }
+.hero-h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(44px,7.5vw,90px); font-weight: 400; line-height: .93; color: var(--cr); position: relative; z-index: 2; opacity: 0; animation: fadeUp 1s .55s ease forwards; }
+.hero-h1 em { font-style: italic; color: var(--gold-l); }
+.hero-rule { display: flex; align-items: center; gap: 14px; margin: 20px auto; width: fit-content; position: relative; z-index: 2; opacity: 0; animation: fadeUp 1s .75s ease forwards; }
+.rl { width: 40px; height: 1px; background: rgba(201,168,76,.35); }
+.rd { width: 5px; height: 5px; background: var(--gold); transform: rotate(45deg); }
+.hero-p { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-style: italic; color: rgba(247,242,232,.68); max-width: 420px; line-height: 1.8; position: relative; z-index: 2; opacity: 0; animation: fadeUp 1s .95s ease forwards; }
+.hero-cta {
+  font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--gd); background: var(--gold); border: none; padding: 13px 34px;
+  cursor: pointer; transition: background .25s; margin-top: 28px;
+  position: relative; z-index: 2; opacity: 0; animation: fadeUp 1s 1.15s ease forwards;
+  border-radius: 0; -webkit-appearance: none;
+}
+.hero-cta:hover { background: var(--gold-l); }
+
+/* PDD BANNER */
+.pdd-banner {
+  background: var(--gd); border-top: 3px solid var(--gold);
+  border-bottom: 1px solid rgba(201,168,76,.18);
+  padding: 17px 24px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+}
+.pdd-badge {
+  font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--gold);
+  background: rgba(201,168,76,.14); border: 1px solid var(--gold);
+  padding: 6px 12px; white-space: nowrap;
+}
+.pdd-sep { width: 1px; height: 28px; background: rgba(201,168,76,.2); flex-shrink: 0; }
+.pdd-nm { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-style: italic; color: var(--cr); }
+.pdd-pr { font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--gold); font-weight: 500; white-space: nowrap; margin-left: auto; }
+.pdd-add {
+  font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--gd); background: var(--gold); border: none; padding: 12px 20px;
+  cursor: pointer; font-weight: 500; box-shadow: 0 4px 14px rgba(201,168,76,.38);
+  transition: background .25s; white-space: nowrap; border-radius: 0; -webkit-appearance: none;
+}
+.pdd-add:hover { background: var(--gold-l); }
+.pdd-banner.hidden { display: none; }
+
+/* MENU SECTION */
+.menu-sec { padding: 78px 0; background: var(--cr); }
+.container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+.sec-hdr { text-align: center; margin-bottom: 38px; }
+.sec-lbl { font-size: 9px; letter-spacing: .38em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; display: block; }
+.sec-ttl { font-family: 'Cormorant Garamond', serif; font-size: clamp(28px,4vw,48px); font-weight: 400; color: var(--ch); line-height: 1.1; }
+.sec-ttl em { font-style: italic; color: var(--g); }
+.sec-rule { display: flex; align-items: center; gap: 12px; margin: 13px auto 0; width: fit-content; }
+
+/* TABS */
+.tabs { display: flex; justify-content: center; border-bottom: 1px solid var(--bg); margin-bottom: 36px; flex-wrap: wrap; }
+.tab {
+  font-family: 'Cinzel', serif; font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--mu); background: none; border: none; padding: 11px 15px;
+  cursor: pointer; position: relative; transition: color .25s; white-space: nowrap;
+  -webkit-appearance: none;
+}
+.tab::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: var(--g); transform: scaleX(0); transition: transform .25s; }
+.tab.on { color: var(--g); }
+.tab.on::after { transform: scaleX(1); }
+
+/* GRID */
+.mgrid { display: none; }
+.mgrid.on { display: grid; grid-template-columns: 1fr; gap: 2px; background: var(--cr2); }
+@media(min-width:600px) { .mgrid.on { grid-template-columns: repeat(2,1fr); } }
+
+.mitem { background: var(--cr); padding: 21px 23px; border-left: 3px solid transparent; transition: border-color .25s, background .25s; cursor: pointer; }
+.mitem:hover { border-left-color: var(--g); background: var(--gu); }
+.itag { font-size: 8px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 5px; }
+.inm { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 500; color: var(--ch); margin-bottom: 4px; line-height: 1.2; }
+.idsc { font-family: 'Lato', sans-serif; font-size: 11.5px; color: var(--mu); line-height: 1.6; margin-bottom: 13px; font-style: italic; }
+.ifoot { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--bg); padding-top: 11px; }
+.ipr { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 500; color: var(--gd); }
+.ipr sup { font-size: 11px; vertical-align: super; }
+.badd {
+  font-family: 'Cinzel', serif; font-size: 8.5px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--g); background: transparent; border: 1px solid var(--bd);
+  padding: 7px 14px; cursor: pointer; transition: all .25s; border-radius: 0; -webkit-appearance: none;
+}
+.badd:hover, .badd.on { background: var(--g); color: var(--cr); border-color: var(--g); }
+
+/* INFO BAND */
+.info-band { background: var(--gd); padding: 44px 0; }
+.info-grid { display: grid; grid-template-columns: 1fr; gap: 1px; background: rgba(255,255,255,.08); }
+@media(min-width:600px) { .info-grid { grid-template-columns: repeat(3,1fr); } }
+.info-item { background: var(--gd); padding: 32px 22px; text-align: center; }
+.info-ico { font-size: 20px; color: var(--gold); margin-bottom: 11px; display: block; }
+.info-ttl { font-family: 'Cinzel', serif; font-size: 9.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--cr); margin-bottom: 8px; }
+.info-tx { font-family: 'Cormorant Garamond', serif; font-size: 14px; font-style: italic; color: rgba(247,242,232,.48); line-height: 1.7; }
+
+footer { background: var(--ch); padding: 38px 24px; text-align: center; }
+.f-logo { font-family: 'Cinzel', serif; font-size: 17px; letter-spacing: .22em; color: var(--gold); margin-bottom: 5px; }
+.f-sub { font-size: 8.5px; letter-spacing: .25em; text-transform: uppercase; color: var(--mu); margin-bottom: 13px; }
+.f-info { font-family: 'Cormorant Garamond', serif; font-size: 13px; font-style: italic; color: var(--mu); line-height: 1.9; }
+
+/* CART FLOAT */
+.cart-float {
+  position: fixed; bottom: 22px; right: 22px; z-index: 190;
+  background: var(--g); border: none; width: 52px; height: 52px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all .25s; box-shadow: 0 6px 24px rgba(42,96,56,.38);
+  border-radius: 0; -webkit-appearance: none;
+}
+.cart-float:hover { background: var(--gm); transform: translateY(-2px); }
+.cbadge {
+  position: absolute; top: -7px; right: -7px;
+  background: var(--gold); color: var(--gd);
+  width: 21px; height: 21px; border-radius: 50%;
+  font-size: 10px; font-family: 'Cinzel', serif; font-weight: 700;
+  display: none; align-items: center; justify-content: center;
+}
+
+/* ORDER PANEL */
+.overlay { position: fixed; inset: 0; background: rgba(26,66,40,.6); z-index: 290; opacity: 0; pointer-events: none; transition: opacity .35s; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
+.overlay.on { opacity: 1; pointer-events: all; }
+.opanel {
+  position: fixed; top: 0; right: -105%; width: 100%; max-width: 440px; height: 100vh;
+  background: var(--cr); border-left: 1px solid var(--bg); z-index: 300;
+  transition: right .45s cubic-bezier(.4,0,.2,1); display: flex; flex-direction: column; overflow: hidden;
+}
+.opanel.on { right: 0; }
+.op-head {
+  padding: 20px 22px 16px; border-bottom: 1px solid var(--bg);
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--gd); flex-shrink: 0;
+}
+.op-ttl { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); }
+.op-close { background: none; border: none; cursor: pointer; color: rgba(247,242,232,.5); font-size: 20px; line-height: 1; -webkit-appearance: none; }
+.op-close:hover { color: var(--cr); }
+.op-body { flex: 1; overflow-y: auto; padding: 16px 22px; }
+.op-body::-webkit-scrollbar { width: 3px; }
+.op-body::-webkit-scrollbar-thumb { background: var(--bg); }
+.op-empty { text-align: center; padding: 40px 0; color: var(--mu); }
+.op-empty p:first-child { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-style: italic; margin-bottom: 5px; }
+.op-empty p:last-child { font-size: 10px; letter-spacing: .1em; }
+.orow { display: flex; align-items: center; gap: 11px; padding: 12px 0; border-bottom: 1px solid var(--bg); }
+.oi { flex: 1; }
+.oin { font-family: 'Cormorant Garamond', serif; font-size: 14px; color: var(--ch); margin-bottom: 2px; font-weight: 500; }
+.oip { font-size: 10px; color: var(--g); }
+.oqty { display: flex; align-items: center; gap: 9px; }
+.qb { width: 25px; height: 25px; border: 1px solid var(--bg); background: none; color: var(--mu); cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; transition: all .2s; border-radius: 0; -webkit-appearance: none; }
+.qb:hover { border-color: var(--g); color: var(--g); }
+.qv { font-family: 'Cormorant Garamond', serif; font-size: 17px; min-width: 18px; text-align: center; color: var(--ch); }
+.op-foot { padding: 14px 22px; border-top: 1px solid var(--bg); background: var(--cr2); flex-shrink: 0; }
+.tot-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 13px; }
+.tot-lbl { font-size: 9px; letter-spacing: .22em; text-transform: uppercase; color: var(--mu); }
+.tot-v { font-family: 'Cormorant Garamond', serif; font-size: 25px; font-weight: 500; color: var(--gd); }
+.flbl { font-size: 9px; letter-spacing: .2em; text-transform: uppercase; color: var(--mu); margin-bottom: 7px; display: block; }
+.chs { display: grid; gap: 6px; margin-bottom: 11px; }
+.chb {
+  background: var(--cr); border: 1px solid var(--bg); padding: 9px 5px;
+  cursor: pointer; transition: all .22s; color: var(--mu);
+  font-size: 8px; letter-spacing: .08em; text-transform: uppercase;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  font-family: 'Lato'; font-weight: 300; border-radius: 0; -webkit-appearance: none;
+}
+.chb svg { opacity: .38; transition: opacity .22s; }
+.chb:hover, .chb.on { border-color: var(--g); color: var(--g); background: var(--gl); }
+.chb:hover svg, .chb.on svg { opacity: 1; }
+.chb.wa:hover, .chb.wa.on { border-color: var(--wa); color: var(--wa); background: rgba(37,211,102,.07); }
+.finp {
+  width: 100%; border: 1px solid var(--bg); padding: 10px 12px;
+  font-family: 'Lato', sans-serif; font-size: 13px; font-weight: 300; color: var(--tx);
+  background: var(--cr); outline: none; transition: border-color .25s; margin-bottom: 10px;
+  border-radius: 0; -webkit-appearance: none;
+}
+.finp:focus { border-color: var(--g); }
+.bsend {
+  width: 100%; font-family: 'Cinzel', serif; font-size: 10.5px; letter-spacing: .2em;
+  text-transform: uppercase; background: var(--g); color: var(--cr);
+  border: none; padding: 15px; cursor: pointer; transition: background .25s;
+  border-radius: 0; -webkit-appearance: none;
+}
+.bsend:hover { background: var(--gm); }
+.bsend:disabled { opacity: .38; cursor: not-allowed; }
+.bsend.wa { background: var(--wa); }
+.bsend.wa:hover { background: #1da851; }
+
+/* TOAST & MODAL */
+.toast {
+  position: fixed; top: 76px; right: 22px; z-index: 500;
+  background: var(--cr); border: 1px solid var(--bg); border-left: 3px solid var(--g);
+  padding: 11px 17px; opacity: 0; pointer-events: none; transform: translateX(18px);
+  transition: all .28s; font-family: 'Cormorant Garamond', serif; font-size: 13px;
+  font-style: italic; color: var(--tx); box-shadow: 0 4px 18px rgba(42,96,56,.12);
+  max-width: 260px;
+}
+.toast.on { opacity: 1; pointer-events: all; transform: none; }
+.modal-bg {
+  position: fixed; inset: 0; background: rgba(26,66,40,.75); z-index: 9999;
+  display: none; align-items: center; justify-content: center;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); padding: 20px;
+}
+.modal-bg.on { display: flex; }
+.modal-box {
+  background: var(--cr); border: 1px solid var(--bg); border-top: 3px solid var(--gold);
+  padding: 42px 30px; max-width: 400px; width: 100%; text-align: center; animation: fadeUp .35s ease;
+}
+.modal-ico { font-size: 30px; margin-bottom: 14px; }
+.modal-ttl { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 500; color: var(--gd); margin-bottom: 8px; }
+.modal-tx { font-family: 'Cormorant Garamond', serif; font-size: 14px; font-style: italic; color: var(--mu); line-height: 1.7; margin-bottom: 24px; }
+.modal-btn { font-family: 'Cinzel', serif; font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; background: var(--g); color: var(--cr); border: none; padding: 13px 30px; cursor: pointer; border-radius: 0; -webkit-appearance: none; transition: background .25s; }
+.modal-btn:hover { background: var(--gm); }
+
+/* ============================================================
+   ADMIN
+   ============================================================ */
+.adm-notif {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 9998;
+  background: var(--g); color: var(--cr); padding: 12px 22px;
+  display: flex; align-items: center; gap: 14px;
+  transform: translateY(-100%); transition: transform .38s cubic-bezier(.4,0,.2,1);
+  box-shadow: 0 4px 18px rgba(0,0,0,.22); flex-shrink: 0;
+}
+.adm-notif.on { transform: translateY(0); }
+.npulse { width: 9px; height: 9px; background: var(--gold); border-radius: 50%; animation: pulse 1.1s infinite; flex-shrink: 0; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.45;transform:scale(1.35)} }
+.ntx { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .13em; flex: 1; }
+.nsub { font-size: 10.5px; color: rgba(247,242,232,.68); }
+.ndis { background: none; border: none; color: rgba(247,242,232,.5); cursor: pointer; font-size: 19px; line-height: 1; flex-shrink: 0; }
+
+/* ADM NAV */
+.adm-nav {
+  background: var(--gd); padding: 0 22px;
+  display: flex; align-items: center; border-bottom: 2px solid var(--gold);
+  flex-shrink: 0; overflow-x: auto;
+}
+.adm-brand { display: flex; align-items: center; gap: 10px; padding: 12px 0; margin-right: 14px; flex-shrink: 0; }
+.adm-bc { width: 34px; height: 34px; background: var(--gm); border-radius: 50%; border: 1.5px solid var(--gold); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.adm-bc span { font-family: 'Cinzel', serif; font-size: 6px; color: var(--gold); text-align: center; line-height: 1.3; }
+.adm-bname { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: .15em; color: var(--cr); white-space: nowrap; }
+.adm-bsub { font-size: 7px; letter-spacing: .22em; text-transform: uppercase; color: var(--mu); margin-top: 1px; white-space: nowrap; }
+.adm-tabs { display: flex; }
+.atab {
+  font-family: 'Cinzel', serif; font-size: 9.5px; letter-spacing: .13em; text-transform: uppercase;
+  color: var(--mu); background: none; border: none; padding: 17px 14px;
+  cursor: pointer; transition: color .25s; border-bottom: 2px solid transparent;
+  margin-bottom: -2px; white-space: nowrap; -webkit-appearance: none;
+}
+.atab.on { color: var(--gold); border-bottom-color: var(--gold); }
+.atab:hover { color: var(--cr); }
+.abadge { display: inline-flex; align-items: center; justify-content: center; background: var(--gold); color: var(--gd); border-radius: 50%; width: 16px; height: 16px; font-size: 8.5px; margin-left: 5px; font-family: 'Lato'; font-weight: 700; vertical-align: middle; }
+.adm-right { margin-left: auto; display: flex; align-items: center; gap: 10px; padding: 10px 0; flex-shrink: 0; }
+.btn-vs {
+  font-family: 'Cinzel', serif; font-size: 8.5px; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--gold); background: none;
+  border: 1px solid rgba(201,168,76,.28); padding: 7px 13px;
+  cursor: pointer; transition: all .25s; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;
+  border-radius: 0; -webkit-appearance: none;
+}
+.btn-vs:hover { background: rgba(201,168,76,.1); border-color: var(--gold); }
+.btn-out { font-size: 8.5px; letter-spacing: .13em; text-transform: uppercase; color: var(--mu); background: none; border: none; cursor: pointer; transition: color .25s; padding: 7px; -webkit-appearance: none; white-space: nowrap; }
+.btn-out:hover { color: var(--gold); }
+
+/* ADM CONTENT */
+.adm-content { flex: 1; padding: 22px; overflow-y: auto; background: #EDE9DF; }
+.apanel { display: none; }
+.apanel.on { display: block; }
+
+/* ADM COMMON */
+.atitle { font-family: 'Cormorant Garamond', serif; font-size: 23px; font-weight: 400; color: var(--ch); margin-bottom: 5px; }
+.atitle em { font-style: italic; color: var(--g); }
+.ameta { font-size: 10.5px; color: var(--mu); margin-bottom: 16px; }
+.live-tag { display: inline-flex; align-items: center; gap: 7px; background: rgba(45,158,95,.1); border: 1px solid rgba(45,158,95,.2); padding: 4px 12px; margin-bottom: 14px; }
+.lc { width: 7px; height: 7px; background: var(--go); border-radius: 50%; animation: pulse 1.5s infinite; }
+.live-tag span { font-size: 8.5px; letter-spacing: .17em; text-transform: uppercase; color: var(--go); }
+
+/* FILTERS */
+.filters { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+.fbtn { font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; background: var(--cr); border: 1px solid var(--bg); padding: 6px 13px; cursor: pointer; transition: all .22s; color: var(--mu); font-family: 'Lato'; font-weight: 300; border-radius: 0; -webkit-appearance: none; }
+.fbtn.on { background: var(--g); color: var(--cr); border-color: var(--g); }
+
+/* ORDER CARDS */
+.olist { display: flex; flex-direction: column; gap: 9px; }
+.ocard { background: var(--cr); border: 1px solid var(--bg); border-left: 4px solid #ccc; padding: 17px 19px; }
+.ocard.s-novo { border-left-color: var(--g); animation: slideIn .35s ease; }
+.ocard.s-prep { border-left-color: var(--gold); }
+.ocard.s-pronto { border-left-color: var(--go); }
+.ocard.s-entregue { border-left-color: #ccc; opacity: .6; }
+@keyframes slideIn { from{opacity:0;transform:translateX(-10px)} to{opacity:1;transform:none} }
+.oc-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; gap: 10px; }
+.oc-n { font-family: 'Cinzel', serif; font-size: 12.5px; color: var(--gd); letter-spacing: .1em; }
+.oc-t { font-size: 9.5px; color: var(--mu); margin-top: 2px; }
+.oc-r { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.oc-ch { font-size: 7.5px; letter-spacing: .12em; text-transform: uppercase; background: var(--gl); color: var(--g); padding: 3px 8px; border: 1px solid var(--bd); }
+.oc-ch.wa { background: rgba(37,211,102,.09); color: var(--wa); border-color: rgba(37,211,102,.28); }
+.oc-items { margin-bottom: 11px; }
+.oc-il { font-size: 12.5px; color: var(--tx); padding: 3px 0; border-bottom: 1px solid rgba(42,96,56,.06); }
+.oc-il:last-child { border: none; }
+.oc-foot { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 7px; padding-top: 10px; border-top: 1px solid var(--bg); }
+.oc-tot { font-family: 'Cormorant Garamond', serif; font-size: 21px; color: var(--gd); font-weight: 500; }
+.oc-acts { display: flex; gap: 6px; flex-wrap: wrap; }
+.sbtn { font-family: 'Cinzel', serif; font-size: 8.5px; letter-spacing: .1em; text-transform: uppercase; border: none; padding: 7px 12px; cursor: pointer; transition: all .22s; border-radius: 0; -webkit-appearance: none; }
+.sbtn-prep { background: rgba(201,168,76,.11); color: #8B6914; border: 1px solid rgba(201,168,76,.28); } .sbtn-prep:hover { background: var(--gold); color: var(--gd); }
+.sbtn-rdy { background: rgba(45,158,95,.09); color: #1A6B3F; border: 1px solid rgba(45,158,95,.28); } .sbtn-rdy:hover { background: var(--go); color: var(--cr); }
+.sbtn-dlv { background: rgba(42,96,56,.07); color: var(--g); border: 1px solid var(--bd); } .sbtn-dlv:hover { background: var(--g); color: var(--cr); }
+.sbtn-del { background: transparent; color: #bbb; border: 1px solid #ddd; padding: 7px 9px; } .sbtn-del:hover { background: #fee; color: var(--rd); border-color: var(--rd); }
+.stag { font-size: 7.5px; letter-spacing: .12em; text-transform: uppercase; padding: 3px 8px; border: 1px solid; }
+.stag-novo { background: var(--gl); color: var(--g); border-color: var(--bd); }
+.stag-prep { background: rgba(201,168,76,.09); color: #8B6914; border-color: rgba(201,168,76,.24); }
+.stag-pronto { background: rgba(45,158,95,.09); color: #1A6B3F; border-color: rgba(45,158,95,.2); }
+.stag-entregue { background: #f2f2f2; color: #aaa; border-color: #e0e0e0; }
+.empty-o { text-align: center; padding: 56px 0; color: var(--mu); }
+.empty-o p:first-child { font-family: 'Cormorant Garamond', serif; font-size: 19px; font-style: italic; margin-bottom: 7px; }
+
+/* STATS */
+.sg { display: grid; grid-template-columns: repeat(2,1fr); gap: 9px; margin-bottom: 18px; }
+@media(min-width:550px){.sg{grid-template-columns:repeat(4,1fr)}}
+.sc { background: var(--cr); border: 1px solid var(--bg); padding: 18px; text-align: center; }
+.sv { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 500; color: var(--gd); line-height: 1; }
+.sl { font-size: 7.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--mu); margin-top: 7px; }
+
+/* PDD ADMIN */
+.pdd-admin { background: var(--cr); border: 1px solid var(--bg); border-top: 3px solid var(--gold); padding: 20px; margin-bottom: 16px; }
+.pdd-admin-ttl { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-style: italic; color: var(--ch); margin-bottom: 11px; }
+.pdd-cur { display: flex; align-items: center; gap: 13px; padding: 12px; background: var(--gold-p); border: 1px solid var(--bg); margin-bottom: 9px; flex-wrap: wrap; }
+.pdd-cur-lbl { font-size: 7.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); white-space: nowrap; }
+.pdd-cur-nm { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-style: italic; color: var(--ch); }
+.pdd-cur-pr { font-family: 'Cormorant Garamond', serif; font-size: 16px; color: var(--gd); font-weight: 500; margin-left: auto; }
+.btn-clr-pdd { font-family: 'Cinzel', serif; font-size: 8.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--mu); background: transparent; border: 1px solid var(--bd); padding: 6px 11px; cursor: pointer; transition: all .25s; border-radius: 0; -webkit-appearance: none; }
+.btn-clr-pdd:hover { border-color: var(--g); color: var(--g); }
+.pdd-none { font-family: 'Cormorant Garamond', serif; font-size: 13.5px; font-style: italic; color: var(--mu); padding: 11px; background: var(--cr2); margin-bottom: 9px; }
+.pdd-hint { font-size: 10.5px; color: var(--mu); font-style: italic; }
+
+/* DISH FORM */
+.dform { background: var(--cr); border: 1px solid var(--bg); border-left: 3px solid var(--g); padding: 20px; margin-bottom: 16px; display: none; }
+.dform.on { display: block; animation: fadeUp .28s ease; }
+.dform-ttl { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-style: italic; color: var(--ch); margin-bottom: 14px; }
+.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; margin-bottom: 11px; }
+.frow.full { grid-template-columns: 1fr; }
+.fg { display: flex; flex-direction: column; gap: 5px; }
+.fl { font-size: 8.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--mu); }
+.fi, .fsel, .fta {
+  border: 1px solid var(--bg); padding: 10px 12px;
+  font-family: 'Lato', sans-serif; font-size: 13px; font-weight: 300; color: var(--tx);
+  background: var(--gu); outline: none; transition: border-color .25s; width: 100%;
+  border-radius: 0; -webkit-appearance: none;
+}
+.fi:focus, .fsel:focus, .fta:focus { border-color: var(--g); }
+.fta { resize: vertical; min-height: 68px; }
+.facts { display: flex; gap: 9px; margin-top: 5px; flex-wrap: wrap; }
+.bsave { font-family: 'Cinzel', serif; font-size: 9.5px; letter-spacing: .15em; text-transform: uppercase; color: var(--cr); background: var(--g); border: none; padding: 11px 22px; cursor: pointer; transition: background .25s; border-radius: 0; -webkit-appearance: none; }
+.bsave:hover { background: var(--gm); }
+.bcancel { font-family: 'Cinzel', serif; font-size: 9.5px; letter-spacing: .15em; text-transform: uppercase; color: var(--mu); background: transparent; border: 1px solid var(--bd); padding: 11px 17px; cursor: pointer; transition: all .25s; border-radius: 0; -webkit-appearance: none; }
+.bcancel:hover { border-color: var(--g); color: var(--g); }
+
+/* DISHES GRID */
+.dhead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 9px; }
+.bnew { font-family: 'Cinzel', serif; font-size: 9.5px; letter-spacing: .15em; text-transform: uppercase; color: var(--cr); background: var(--g); border: none; padding: 9px 20px; cursor: pointer; transition: background .25s; border-radius: 0; -webkit-appearance: none; }
+.bnew:hover { background: var(--gm); }
+.dgrid { display: grid; grid-template-columns: 1fr; gap: 9px; }
+@media(min-width:550px){.dgrid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:820px){.dgrid{grid-template-columns:repeat(3,1fr)}}
+.dcat-h { grid-column: 1/-1; padding: 8px 0 5px; margin-top: 4px; }
+.dcat-l { font-family: 'Cinzel', serif; font-size: 9.5px; letter-spacing: .17em; text-transform: uppercase; color: var(--g); border-bottom: 1px solid var(--bg); padding-bottom: 6px; }
+.dc { background: var(--cr); border: 1px solid var(--bg); padding: 14px; position: relative; }
+.dc-cat { font-size: 7.5px; letter-spacing: .15em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+.dc-nm { font-family: 'Cormorant Garamond', serif; font-size: 14.5px; font-weight: 500; color: var(--ch); margin-bottom: 3px; }
+.dc-tag { font-size: 7.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--g); margin-bottom: 4px; }
+.dc-dsc { font-size: 10.5px; color: var(--mu); line-height: 1.5; margin-bottom: 9px; font-style: italic; }
+.dc-foot { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--bg); padding-top: 8px; flex-wrap: wrap; gap: 5px; }
+.dc-pr { font-family: 'Cormorant Garamond', serif; font-size: 16px; color: var(--gd); font-weight: 500; }
+.dc-acts { display: flex; gap: 4px; flex-wrap: wrap; }
+.bpdd { font-size: 7.5px; background: var(--gold-p); color: #8B6914; border: 1px solid rgba(201,168,76,.28); padding: 4px 7px; cursor: pointer; transition: all .22s; font-family: 'Lato'; border-radius: 0; -webkit-appearance: none; }
+.bpdd:hover, .bpdd.on { background: var(--gold); color: var(--gd); border-color: var(--gold); }
+.bedit { font-size: 7.5px; background: var(--gl); color: var(--g); border: 1px solid var(--bd); padding: 4px 7px; cursor: pointer; transition: all .22s; font-family: 'Lato'; border-radius: 0; -webkit-appearance: none; }
+.bedit:hover { background: var(--g); color: var(--cr); }
+.bdel { font-size: 7.5px; background: transparent; color: #bbb; border: 1px solid #ddd; padding: 4px 6px; cursor: pointer; transition: all .22s; font-family: 'Lato'; border-radius: 0; -webkit-appearance: none; }
+.bdel:hover { background: #fee; color: var(--rd); border-color: var(--rd); }
+.pdd-chip { font-size: 7px; letter-spacing: .11em; text-transform: uppercase; background: var(--gold); color: var(--gd); padding: 2px 6px; position: absolute; top: 9px; right: 9px; font-family: 'Cinzel', serif; }
+
+/* ============================================================
+   CONFIGURAÇÕES — layout arrumado
+   ============================================================ */
+.cfg-grid { display: flex; flex-direction: column; gap: 14px; }
+.cfg-card { background: var(--cr); border: 1px solid var(--bg); overflow: hidden; }
+.cfg-card-head { padding: 16px 20px; border-bottom: 1px solid var(--bg); display: flex; align-items: center; gap: 11px; }
+.cfg-ico { font-size: 17px; flex-shrink: 0; }
+.cfg-nm { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--gd); }
+.cfg-sub { font-size: 10.5px; color: var(--mu); margin-top: 2px; font-style: italic; }
+.cfg-body { padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; }
+.cfg-field { display: flex; flex-direction: column; gap: 6px; }
+.cfg-lbl { font-size: 8.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--mu); }
+.cfg-inp {
+  border: 1px solid var(--bg); padding: 11px 13px;
+  font-family: 'Lato', sans-serif; font-size: 13px; font-weight: 300; color: var(--tx);
+  background: var(--gu); outline: none; transition: border-color .25s;
+  border-radius: 0; -webkit-appearance: none; width: 100%;
+}
+.cfg-inp:focus { border-color: var(--g); }
+.cfg-hint { font-size: 10px; color: var(--mu); line-height: 1.55; font-style: italic; }
+.cfg-hint strong { font-style: normal; color: var(--tx); }
+
+/* TOGGLE */
+.cfg-toggle { display: flex; align-items: center; gap: 11px; cursor: pointer; user-select: none; }
+.tog-track { width: 42px; height: 23px; background: #ccc; border-radius: 12px; position: relative; transition: background .25s; flex-shrink: 0; }
+.tog-track.on { background: var(--g); }
+.tog-thumb { position: absolute; top: 3px; left: 3px; width: 17px; height: 17px; background: white; border-radius: 50%; transition: left .25s; box-shadow: 0 1px 4px rgba(0,0,0,.18); }
+.tog-track.on .tog-thumb { left: 22px; }
+.tog-lbl { font-size: 13px; color: var(--tx); }
+
+/* WA PREVIEW */
+.wa-prev { background: rgba(37,211,102,.07); border: 1px solid rgba(37,211,102,.22); padding: 12px 14px; display: none; }
+.wa-prev p:first-child { font-size: 8.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--wa); margin-bottom: 5px; font-family: 'Cinzel', serif; }
+.wa-prev p:last-child { font-size: 12.5px; color: var(--tx); font-family: monospace; word-break: break-all; }
+
+/* SAVE ROW */
+.cfg-save-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.bcfg {
+  font-family: 'Cinzel', serif; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--cr); background: var(--g); border: none; padding: 11px 22px;
+  cursor: pointer; transition: background .25s; border-radius: 0; -webkit-appearance: none;
+}
+.bcfg:hover { background: var(--gm); }
+.bcfg:disabled { opacity: .5; cursor: wait; }
+.cfg-ok { font-size: 11px; color: var(--go); font-style: italic; display: none; }
+.cfg-ok.on { display: block; }
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== LOGIN ==================== -->
+<div id="loginScreen" class="screen active">
+  <div class="login-wrap">
+    <div class="login-badge"><span>CANTO<br>VERDE</span></div>
+    <p class="login-title">Canto Verde</p>
+    <p class="login-sub">Painel Administrativo</p>
+    <label class="login-lbl">E-mail</label>
+    <input class="login-inp" id="lEmail" type="email" placeholder="seu@email.com" autocomplete="email">
+    <label class="login-lbl">Senha</label>
+    <input class="login-inp" id="lPass" type="password" placeholder="••••••••" autocomplete="current-password">
+    <button class="login-btn" id="lBtn">Entrar no Painel</button>
+    <p class="login-err" id="lErr"></p>
+    <p class="login-goto" onclick="showClient()">← Ver cardápio do cliente</p>
+  </div>
+</div>
+
+<!-- ==================== CLIENT ==================== -->
+<div id="clientScreen" class="screen">
+  <div class="aviso-bar" id="avisoBanner"></div>
+
+  <nav class="c-nav">
+    <div class="c-brand" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+      <div class="c-circle"><span>CANTO<br>VERDE</span></div>
+      <div>
+        <div class="c-name">Canto Verde</div>
+        <div class="c-tag" id="navTag">Bistrô · Loanda PR</div>
+      </div>
+    </div>
+    <button class="c-btn" onclick="openPanel()">Fazer Pedido</button>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-dots"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-logo">
+      <div class="logo-frame">
+        <span class="logo-n">Canto Verde</span>
+        <span class="logo-b">Bistrô</span>
+      </div>
+    </div>
+    <p class="hero-eye">Sabores que falam por nós · Loanda PR</p>
+    <h1 class="hero-h1">Canto <em>Verde</em></h1>
+    <div class="hero-rule"><div class="rl"></div><div class="rd"></div><div class="rl"></div></div>
+    <p class="hero-p">Bistrô contemporâneo com alma italiana. Risottos artesanais, massas e carnes com ingredientes selecionados.</p>
+    <button class="hero-cta" onclick="document.getElementById('cmenu').scrollIntoView({behavior:'smooth'})">Ver Cardápio</button>
+  </section>
+
+  <div class="pdd-banner hidden" id="pddBanner">
+    <span class="pdd-badge">✦ Prato do Dia</span>
+    <div class="pdd-sep"></div>
+    <span class="pdd-nm" id="pddNm"></span>
+    <span class="pdd-pr" id="pddPr"></span>
+    <button class="pdd-add" id="pddAddBtn">+ Adicionar</button>
+  </div>
+
+  <section class="menu-sec" id="cmenu">
+    <div class="container">
+      <div class="sec-hdr">
+        <span class="sec-lbl">Canto Verde Bistrô</span>
+        <h2 class="sec-ttl">Nosso <em>Cardápio</em></h2>
+        <div class="sec-rule"><div class="rl"></div><div class="rd"></div><div class="rl"></div></div>
+      </div>
+      <div class="tabs" id="menuTabs"></div>
+      <div id="menuGrids"></div>
+    </div>
+  </section>
+
+  <section class="info-band">
+    <div class="container">
+      <div class="info-grid">
+        <div class="info-item"><span class="info-ico">🍷</span><p class="info-ttl">Drinks & Cocktails</p><p class="info-tx">Carta autoral com clássicos revisitados</p></div>
+        <div class="info-item"><span class="info-ico">🌿</span><p class="info-ttl">Ingredientes Frescos</p><p class="info-tx">Risottos e massas preparados na hora</p></div>
+        <div class="info-item"><span class="info-ico">📍</span><p class="info-ttl" id="infoHor">Terça a Sábado</p><p class="info-tx" id="infoEnd">Av. Paraná, 1050 · Loanda PR</p></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p class="f-logo" id="fNome">CANTO VERDE BISTRÔ</p>
+    <p class="f-sub">Sabores que falam por nós</p>
+    <p class="f-info" id="fInfo">Av. Paraná, 1050 · Loanda, Paraná<br>Terça a Sábado · @cantoverdebistro</p>
+  </footer>
+
+  <button class="cart-float" onclick="openPanel()">
+    <svg width="21" height="21" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+    <span class="cbadge" id="cbadge"></span>
+  </button>
+
+  <div class="overlay" id="overlay" onclick="closePanel()"></div>
+  <div class="opanel" id="opanel">
+    <div class="op-head">
+      <span class="op-ttl">Seu Pedido</span>
+      <button class="op-close" onclick="closePanel()">✕</button>
+    </div>
+    <div class="op-body">
+      <div class="op-empty" id="opEmpty"><p>Nenhum item ainda</p><p>Escolha seus pratos acima</p></div>
+      <div id="opItems"></div>
+    </div>
+    <div class="op-foot">
+      <div class="tot-row"><span class="tot-lbl">Total</span><span class="tot-v" id="totV">R$ 0</span></div>
+      <span class="flbl">Enviar via</span>
+      <div class="chs" id="chsGrid"></div>
+      <span class="flbl">Mesa / Nome</span>
+      <input id="tblInput" class="finp" type="text" placeholder="Ex: Mesa 4 ou Maria Silva">
+      <button class="bsend" id="bsend" onclick="sendOrder()" disabled>Confirmar Pedido</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <div class="modal-bg" id="modal">
+    <div class="modal-box">
+      <div class="modal-ico" id="mIco">✅</div>
+      <h3 class="modal-ttl" id="mTtl">Pedido Enviado!</h3>
+      <p class="modal-tx" id="mTx"></p>
+      <button class="modal-btn" onclick="document.getElementById('modal').classList.remove('on')">Ótimo!</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== ADMIN ==================== -->
+<div id="adminScreen" class="screen">
+  <div class="adm-notif" id="admNotif">
+    <div class="npulse"></div>
+    <span class="ntx" id="nTx">Novo pedido!</span>
+    <span class="nsub" id="nSub"></span>
+    <button class="ndis" onclick="document.getElementById('admNotif').classList.remove('on')">✕</button>
+  </div>
+
+  <nav class="adm-nav">
+    <div class="adm-brand">
+      <div class="adm-bc"><span>CV<br>B</span></div>
+      <div><div class="adm-bname">Canto Verde</div><div class="adm-bsub">Admin</div></div>
+    </div>
+    <div class="adm-tabs">
+      <button class="atab on" onclick="aTab('orders',this)">Pedidos <span class="abadge" id="aBadge">0</span></button>
+      <button class="atab" onclick="aTab('dishes',this)">Cardápio</button>
+      <button class="atab" onclick="aTab('stats',this)">Resumo</button>
+      <button class="atab" onclick="aTab('config',this)">⚙️ Config</button>
+    </div>
+    <div class="adm-right">
+      <button class="btn-vs" onclick="showClient()">↗ Ver Site</button>
+      <button class="btn-out" id="outBtn">Sair</button>
+    </div>
+  </nav>
+
+  <div class="adm-content">
+
+    <!-- PEDIDOS -->
+    <div class="apanel on" id="ap-orders">
+      <p class="atitle">Pedidos <em>em Tempo Real</em></p>
+      <div class="live-tag"><div class="lc"></div><span>Firebase · Ao vivo</span></div>
+      <p class="ameta" id="oMeta">Aguardando pedidos...</p>
+      <div class="filters">
+        <button class="fbtn on" onclick="fOrders('todos',this)">Todos</button>
+        <button class="fbtn" onclick="fOrders('novo',this)">Novos</button>
+        <button class="fbtn" onclick="fOrders('prep',this)">Em Preparo</button>
+        <button class="fbtn" onclick="fOrders('pronto',this)">Prontos</button>
+        <button class="fbtn" onclick="fOrders('entregue',this)">Entregues</button>
+      </div>
+      <div class="olist" id="oList">
+        <div class="empty-o"><p>Nenhum pedido ainda</p><p style="font-size:10.5px">Os pedidos chegam aqui instantaneamente</p></div>
+      </div>
+    </div>
+
+    <!-- CARDÁPIO -->
+    <div class="apanel" id="ap-dishes">
+      <div class="pdd-admin">
+        <p class="pdd-admin-ttl">✦ Prato do Dia</p>
+        <div id="pddAdmWrap"></div>
+        <p class="pdd-hint">Clique em "Prato do Dia" em qualquer prato abaixo para destacá-lo no site.</p>
+      </div>
+      <div class="dhead">
+        <p class="atitle">Gerenciar <em>Cardápio</em></p>
+        <button class="bnew" onclick="toggleForm()">+ Novo Prato</button>
+      </div>
+      <div class="dform" id="dform">
+        <p class="dform-ttl" id="dformTtl">Adicionar Prato</p>
+        <div class="frow">
+          <div class="fg"><label class="fl">Nome</label><input class="fi" id="dNm" type="text" placeholder="Ex: Risotto al Funghi"></div>
+          <div class="fg"><label class="fl">Categoria</label>
+            <select class="fsel" id="dCat">
+              <option value="entradas">Entradas</option><option value="saladas">Saladas</option>
+              <option value="principais">Pratos Principais</option><option value="acompanhamentos">Para Acompanhar</option>
+              <option value="bebidas">Bebidas</option><option value="cervejas">Cervejas</option>
+              <option value="drinks">Drinks & Cocktails</option><option value="sobremesas">Sobremesas</option>
+            </select>
+          </div>
+        </div>
+        <div class="frow">
+          <div class="fg"><label class="fl">Preço (R$)</label><input class="fi" id="dPr" type="number" placeholder="0"></div>
+          <div class="fg"><label class="fl">Tag (opcional)</label><input class="fi" id="dTag" type="text" placeholder="Vegetariano, 2 pessoas..."></div>
+        </div>
+        <div class="frow full"><div class="fg"><label class="fl">Descrição</label><textarea class="fta" id="dDsc" placeholder="Ingredientes e modo de preparo..."></textarea></div></div>
+        <div class="facts">
+          <button class="bsave" onclick="saveDish()">Salvar Prato</button>
+          <button class="bcancel" onclick="toggleForm()">Cancelar</button>
+        </div>
+      </div>
+      <div class="dgrid" id="dgrid"></div>
+    </div>
+
+    <!-- RESUMO -->
+    <div class="apanel" id="ap-stats">
+      <p class="atitle">Resumo <em>do Dia</em></p>
+      <p class="ameta" id="sMeta" style="margin-bottom:16px"></p>
+      <div class="sg">
+        <div class="sc"><div class="sv" id="s1">0</div><div class="sl">Total Pedidos</div></div>
+        <div class="sc"><div class="sv" id="s2">0</div><div class="sl">Aguardando</div></div>
+        <div class="sc"><div class="sv" id="s3">0</div><div class="sl">Entregues</div></div>
+        <div class="sc"><div class="sv" id="s4">R$0</div><div class="sl">Faturamento</div></div>
+      </div>
+      <div id="sRecent"></div>
+    </div>
+
+    <!-- CONFIGURAÇÕES -->
+    <div class="apanel" id="ap-config">
+      <p class="atitle">⚙️ <em>Configurações</em></p>
+      <p class="ameta">Todas as alterações aparecem no site dos clientes automaticamente.</p>
+
+      <div class="cfg-grid">
+
+        <!-- WhatsApp -->
+        <div class="cfg-card">
+          <div class="cfg-card-head">
+            <span class="cfg-ico">💬</span>
+            <div><p class="cfg-nm">WhatsApp</p><p class="cfg-sub">Número que recebe pedidos via WhatsApp</p></div>
+          </div>
+          <div class="cfg-body">
+            <div class="cfg-field">
+              <label class="cfg-lbl">Número do WhatsApp</label>
+              <input class="cfg-inp" id="cfgWA" type="tel" placeholder="Ex: 5544999991234">
+              <p class="cfg-hint">Formato: <strong>55 + DDD + número</strong> (só dígitos, sem espaços)<br>Exemplo Paraná: <strong>5544912345678</strong></p>
+              <div class="wa-prev" id="waPrev"><p>Link gerado</p><p id="waLink"></p></div>
+            </div>
+            <div class="cfg-field">
+              <label class="cfg-lbl">Ativar botão WhatsApp no site</label>
+              <div class="cfg-toggle" onclick="togWA()">
+                <div class="tog-track" id="togWA"><div class="tog-thumb"></div></div>
+                <span class="tog-lbl" id="togWALbl">Desativado</span>
+              </div>
+            </div>
+            <div class="cfg-save-row">
+              <button class="bcfg" onclick="saveCfg('wa')">Salvar WhatsApp</button>
+              <span class="cfg-ok" id="okWA">✓ Salvo!</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Restaurante -->
+        <div class="cfg-card">
+          <div class="cfg-card-head">
+            <span class="cfg-ico">🍽️</span>
+            <div><p class="cfg-nm">Informações do Restaurante</p><p class="cfg-sub">Aparecem no rodapé e nas mensagens do WhatsApp</p></div>
+          </div>
+          <div class="cfg-body">
+            <div class="cfg-field"><label class="cfg-lbl">Nome</label><input class="cfg-inp" id="cfgNome" type="text" placeholder="Canto Verde Bistrô"></div>
+            <div class="cfg-field"><label class="cfg-lbl">Endereço</label><input class="cfg-inp" id="cfgEnd" type="text" placeholder="Av. Paraná, 1050 · Loanda PR"></div>
+            <div class="cfg-field"><label class="cfg-lbl">Horário</label><input class="cfg-inp" id="cfgHor" type="text" placeholder="Terça a Sábado · 18h às 23h"></div>
+            <div class="cfg-field"><label class="cfg-lbl">Instagram</label><input class="cfg-inp" id="cfgInsta" type="text" placeholder="@cantoverdebistro"></div>
+            <div class="cfg-save-row">
+              <button class="bcfg" onclick="saveCfg('rest')">Salvar Informações</button>
+              <span class="cfg-ok" id="okRest">✓ Salvo!</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Aviso -->
+        <div class="cfg-card">
+          <div class="cfg-card-head">
+            <span class="cfg-ico">📢</span>
+            <div><p class="cfg-nm">Aviso no Site</p><p class="cfg-sub">Banner para os clientes (ex: fechado hoje, promoção)</p></div>
+          </div>
+          <div class="cfg-body">
+            <div class="cfg-field">
+              <label class="cfg-lbl">Ativar aviso</label>
+              <div class="cfg-toggle" onclick="togAviso()">
+                <div class="tog-track" id="togAviso"><div class="tog-thumb"></div></div>
+                <span class="tog-lbl" id="togAvisoLbl">Desativado</span>
+              </div>
+            </div>
+            <div class="cfg-field"><label class="cfg-lbl">Texto do aviso</label><input class="cfg-inp" id="cfgAviso" type="text" placeholder="Ex: Hoje fechado para evento privado"></div>
+            <div class="cfg-save-row">
+              <button class="bcfg" onclick="saveCfg('aviso')">Salvar Aviso</button>
+              <span class="cfg-ok" id="okAviso">✓ Salvo!</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /adm-content -->
+</div><!-- /adminScreen -->
+
+<!-- ==================== FIREBASE ==================== -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, doc, setDoc, updateDoc, deleteDoc, query, orderBy, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+/* ---------- INIT ---------- */
+const app = initializeApp({
+  apiKey: "AIzaSyCGLaMp4_yhjVgmy9QoSjaEbdcseSNlw1U",
+  authDomain: "canto-verde-a1b69.firebaseapp.com",
+  projectId: "canto-verde-a1b69",
+  storageBucket: "canto-verde-a1b69.firebasestorage.app",
+  messagingSenderId: "93744181656",
+  appId: "1:93744181656:web:eb0e18937c9a2b53823bed"
+});
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+/* ---------- STATE ---------- */
+let orders = [], cart = [], pddDish = null, selCh = 'tablet';
+let firstLoad = true, unsubOrders = null, editingId = null, dishIdCounter = 100;
+let waOn = false, avisoOn = false, currentFilter = 'todos';
+let toastT;
+
+const cfg = { waNumber:'', waEnabled:false, nome:'Canto Verde Bistrô', endereco:'Av. Paraná, 1050 · Loanda PR', horario:'Terça a Sábado', instagram:'@cantoverdebistro', avisoTexto:'', avisoEnabled:false };
+const ST = { novo:'Novo', prep:'Em Preparo', pronto:'Pronto', entregue:'Entregue' };
+const CAT_O = ['entradas','saladas','principais','acompanhamentos','bebidas','cervejas','drinks','sobremesas'];
+const CAT_N = { entradas:'Entradas', saladas:'Saladas', principais:'Pratos Principais', acompanhamentos:'Para Acompanhar', bebidas:'Bebidas', cervejas:'Cervejas', drinks:'Drinks & Cocktails', sobremesas:'Sobremesas' };
+
+/* ---------- DISHES ---------- */
+let dishes = [
+  {id:1,name:'Dadinho de Tapioca',cat:'entradas',desc:'Tapioca e queijo coalho, geleia de pimenta. 12un',price:40,tag:'Vegetariano'},
+  {id:2,name:'Mignon Acebolado',cat:'entradas',desc:'Cubos de filé mignon, pétalas de cebola e molho de soja. 400g',price:59,tag:''},
+  {id:3,name:'Mini Coxinha',cat:'entradas',desc:'Mandioca, costela bovina, empanadas em panko. 300g',price:39,tag:''},
+  {id:4,name:'Bolinha de Queijo',cat:'entradas',desc:'Recheadas com muçarela e orégano. 300g',price:39,tag:'Vegetariano'},
+  {id:5,name:'Batata Frita',cat:'entradas',desc:'400g',price:32,tag:'Vegano'},
+  {id:6,name:'Salada do Canto',cat:'saladas',desc:'Alface, tomate, molho de iogurte e parmesão.',price:22,tag:'Vegetariano'},
+  {id:7,name:'Salada Portofino',cat:'saladas',desc:'Alface, palmito, azeitonas, mostarda e mel.',price:22,tag:'Vegetariano'},
+  {id:8,name:'Picanha na Chapa',cat:'principais',desc:'400g picanha nelore, batata frita, farofa e vinagrete.',price:149,tag:'2 pessoas'},
+  {id:9,name:'Filé Mignon na Chapa',cat:'principais',desc:'400g filé mignon, batata frita, farofa e vinagrete.',price:149,tag:'2 pessoas'},
+  {id:10,name:'Gnocchi al Sugo',cat:'principais',desc:'Nhoque de mandioca, tomates frescos, manjericão e parmesão.',price:42,tag:'Vegetariano'},
+  {id:11,name:'Gnocchi alla Matriciana',cat:'principais',desc:'Nhoque de mandioca, tomates, manjericão, bacon e parmesão.',price:45,tag:''},
+  {id:12,name:'Spaghetti alla Carbonara',cat:'principais',desc:'Massa de sêmola, gema de ovo, parmesão e bacon.',price:44,tag:''},
+  {id:13,name:'Spaghetti alla Matriciana',cat:'principais',desc:'Massa de sêmola, tomates frescos, manjericão, bacon e parmesão.',price:44,tag:''},
+  {id:14,name:'Risotto ai Broccoli',cat:'principais',desc:'Brócolis e parmesão.',price:49,tag:'Vegetariano'},
+  {id:15,name:'Risotto Parmesão',cat:'principais',desc:'Parmesão e cúrcuma.',price:53,tag:'Vegetariano'},
+  {id:16,name:'Risotto Alho Poró e Bacon',cat:'principais',desc:'Parmesão, alho poró e bacon.',price:54,tag:''},
+  {id:17,name:'Risotto Margherita',cat:'principais',desc:'Tomates frescos, manjericão e parmesão.',price:49,tag:'Vegetariano'},
+  {id:18,name:'Risotto Bacon e Gouda',cat:'principais',desc:'Bacon, gouda e cúrcuma.',price:50,tag:''},
+  {id:19,name:'Risotto Palmito',cat:'principais',desc:'Palmito pupunha, gouda e cebolinha.',price:56,tag:'Vegetariano'},
+  {id:20,name:'Risotto al Funghi',cat:'principais',desc:'Funghi secchi, filé mignon em cubos, molho de soja e cebolinha.',price:75,tag:''},
+  {id:21,name:'Risotto Calabresa',cat:'principais',desc:'Calabresa, tomates frescos, ervilhas e parmesão.',price:50,tag:''},
+  {id:22,name:'Risotto Milho Verde e Bacon',cat:'principais',desc:'Milho verde, bacon, parmesão e filé mignon 150g.',price:70,tag:''},
+  {id:23,name:'Risotto Provolone e Mignon',cat:'principais',desc:'Provolone, filé mignon 150g, cebola caramelizada e bacon.',price:75,tag:''},
+  {id:24,name:'Filé Mignon Grelhado',cat:'acompanhamentos',desc:'150g',price:24,tag:''},
+  {id:25,name:'Medalhão de Filé Mignon',cat:'acompanhamentos',desc:'290g',price:46,tag:''},
+  {id:26,name:'Filé de Tilápia Grelhado',cat:'acompanhamentos',desc:'180g',price:22,tag:''},
+  {id:27,name:'Salmão Grelhado',cat:'acompanhamentos',desc:'190g',price:44,tag:''},
+  {id:28,name:'Filé de Frango',cat:'acompanhamentos',desc:'150g',price:20,tag:''},
+  {id:29,name:'Água Mineral',cat:'bebidas',desc:'',price:4,tag:''},{id:30,name:'Água com Gás',cat:'bebidas',desc:'',price:5,tag:''},{id:31,name:'Água Tônica',cat:'bebidas',desc:'',price:7,tag:''},{id:32,name:'Coca Cola',cat:'bebidas',desc:'',price:7,tag:''},{id:33,name:'Coca Zero',cat:'bebidas',desc:'',price:7,tag:''},{id:34,name:'Fanta Laranja',cat:'bebidas',desc:'',price:7,tag:''},{id:35,name:'Guaraná Antarctica',cat:'bebidas',desc:'',price:7,tag:''},
+  {id:36,name:'Suco de Abacaxi',cat:'bebidas',desc:'',price:12,tag:''},{id:37,name:'Suco de Abacaxi com Hortelã',cat:'bebidas',desc:'',price:12,tag:''},{id:38,name:'Suco de Caju',cat:'bebidas',desc:'',price:12,tag:''},{id:39,name:'Suco de Acerola',cat:'bebidas',desc:'',price:12,tag:''},{id:40,name:'Suco de Maracujá',cat:'bebidas',desc:'',price:14,tag:''},
+  {id:41,name:'Corona',cat:'cervejas',desc:'Long neck',price:12,tag:''},{id:42,name:'Heineken',cat:'cervejas',desc:'Long neck',price:12,tag:''},{id:43,name:'Heineken Zero',cat:'cervejas',desc:'Long neck',price:12,tag:''},{id:44,name:'Patagonia',cat:'cervejas',desc:'Argentina',price:19,tag:''},{id:45,name:'Hoegaarden Witbier',cat:'cervejas',desc:'Bélgica',price:19,tag:''},{id:46,name:'Lagunitas IPA',cat:'cervejas',desc:'Califórnia',price:21,tag:''},
+  {id:47,name:'Aperol Spritz',cat:'drinks',desc:'Aperol, espumante, água com gás e laranja.',price:35,tag:''},{id:48,name:'Gin Tônica',cat:'drinks',desc:'Gin, tônica e limão.',price:32,tag:''},{id:49,name:'Gin Frutas Vermelhas',cat:'drinks',desc:'Gin, tônica, groselha e especiarias.',price:34,tag:''},{id:50,name:'Sex on the Beach',cat:'drinks',desc:'Vodca, licor de pêssego, groselha e suco de laranja.',price:32,tag:''},{id:51,name:'Passione',cat:'drinks',desc:'Scotch, maracujá, limão siciliano, angostura.',price:44,tag:''},{id:52,name:'Not a Caipirinha',cat:'drinks',desc:'Cachaça, mix de limões, açúcar, angostura.',price:34,tag:''},{id:53,name:'Apple Blossom',cat:'drinks',desc:'Gin, xarope de maçã verde, tônica.',price:35,tag:''},{id:54,name:'Negroni',cat:'drinks',desc:'Campari, gin, vermouth rosso e laranja.',price:39,tag:''},{id:55,name:'Old Fashioned',cat:'drinks',desc:'Scotch, açúcar, angostura, laranja e cereja.',price:45,tag:''},{id:56,name:'Campari Tonic',cat:'drinks',desc:'Campari, água tônica e laranja.',price:30,tag:''},{id:57,name:'Pink Blush',cat:'drinks',desc:'Vodka, frutas silvestres, açúcar, limão.',price:38,tag:''},
+  {id:58,name:'Petit Gateau',cat:'sobremesas',desc:'Sorvete de creme e calda de chocolate.',price:25,tag:''},{id:59,name:'Vaniglia Croccante',cat:'sobremesas',desc:'Sorvete de baunilha, ganache, farofa e cookies.',price:28,tag:''},
+];
+
+/* ========== SCREENS ========== */
+window.showClient = () => {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('clientScreen').classList.add('active');
+  renderMenu();
+};
+window.showLogin = () => {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('loginScreen').classList.add('active');
+};
+function showAdmin() {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('adminScreen').classList.add('active');
+  firstLoad = true;
+  startListening();
+  renderDishes();
+  loadCfg();
+}
+
+/* ========== AUTH ========== */
+onAuthStateChanged(auth, user => {
+  if (user) { showAdmin(); }
+  else {
+    if (unsubOrders) { unsubOrders(); unsubOrders = null; }
+    orders = [];
+    const cur = document.getElementById('adminScreen');
+    if (cur.classList.contains('active')) showLogin();
+  }
+});
+
+document.getElementById('lBtn').onclick = async () => {
+  const email = document.getElementById('lEmail').value.trim();
+  const pass = document.getElementById('lPass').value;
+  const btn = document.getElementById('lBtn');
+  const err = document.getElementById('lErr');
+  if (!email || !pass) { err.style.display='block'; err.textContent='Preencha e-mail e senha.'; return; }
+  err.style.display = 'none'; btn.disabled = true; btn.textContent = 'Entrando...';
+  try { await signInWithEmailAndPassword(auth, email, pass); }
+  catch(e) {
+    err.style.display = 'block';
+    const c = e.code || '';
+    if (c.includes('wrong-password')||c.includes('invalid-credential')||c.includes('invalid-login')) err.textContent = 'Senha incorreta.';
+    else if (c.includes('user-not-found')) err.textContent = 'E-mail não cadastrado.';
+    else if (c.includes('too-many-requests')) err.textContent = 'Muitas tentativas. Aguarde.';
+    else err.textContent = 'Erro ao entrar. Verifique suas credenciais.';
+  }
+  btn.disabled = false; btn.textContent = 'Entrar no Painel';
+};
+document.getElementById('lPass').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('lBtn').click(); });
+document.getElementById('outBtn').onclick = () => signOut(auth);
+
+/* ========== REALTIME LISTENERS ========== */
+// Firebase config (PDD + settings)
+onSnapshot(doc(db, 'config', 'pdd'), snap => {
+  pddDish = (snap.exists() && snap.data().active) ? snap.data().dish : null;
+  renderPDD();
+});
+onSnapshot(doc(db, 'config', 'settings'), snap => {
+  if (snap.exists()) Object.assign(cfg, snap.data());
+  applyClientCfg();
+  buildChannels();
+});
+
+function startListening() {
+  if (unsubOrders) { unsubOrders(); }
+  const q = query(collection(db, 'pedidos'), orderBy('createdAt', 'desc'));
+  unsubOrders = onSnapshot(q, snap => {
+    const fresh = [];
+    snap.forEach(d => fresh.push({ fireId: d.id, ...d.data() }));
+    if (!firstLoad) {
+      const ids = orders.map(o => o.fireId);
+      fresh.forEach(o => { if (!ids.includes(o.fireId) && o.status === 'novo') notify(o); });
+    }
+    firstLoad = false; orders = fresh;
+    renderOrders(); renderStats();
+  }, err => console.error('Firestore:', err));
+}
+
+/* ========== NOTIFICATION ========== */
+function notify(order) {
+  document.getElementById('aBadge').textContent = orders.filter(o => o.status === 'novo').length || '0';
+  document.getElementById('nTx').textContent = `🍽 Novo pedido · ${order.table || '?'}`;
+  document.getElementById('nSub').textContent = `R$ ${(order.total||0).toLocaleString('pt-BR')} · ${order.channel || ''}`;
+  const bar = document.getElementById('admNotif');
+  bar.classList.add('on');
+  setTimeout(() => bar.classList.remove('on'), 8000);
+  beep();
+}
+function beep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [[0,660],[200,880],[400,1100]].forEach(([d,f]) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value = f; o.type = 'sine';
+      const t = ctx.currentTime + d/1000;
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.28, t+.05); g.gain.linearRampToValueAtTime(0, t+.22);
+      o.start(t); o.stop(t+.25);
+    });
+  } catch(e) {}
+}
+
+/* ========== CLIENT CONFIG ========== */
+function applyClientCfg() {
+  // Aviso
+  const av = document.getElementById('avisoBanner');
+  if (cfg.avisoEnabled && cfg.avisoTexto) { av.textContent = cfg.avisoTexto; av.classList.add('show'); }
+  else av.classList.remove('show');
+  // Info
+  if (cfg.nome) document.getElementById('fNome').textContent = cfg.nome.toUpperCase();
+  if (cfg.endereco) document.getElementById('infoEnd').textContent = cfg.endereco;
+  if (cfg.horario) document.getElementById('infoHor').textContent = cfg.horario;
+  const end = cfg.endereco || 'Av. Paraná, 1050 · Loanda PR';
+  const hor = cfg.horario || 'Terça a Sábado';
+  const insta = cfg.instagram || '@cantoverdebistro';
+  document.getElementById('fInfo').innerHTML = `${end}<br>${hor} · ${insta}`;
+}
+
+/* ========== MENU RENDER ========== */
+function renderMenu() {
+  const tabs = document.getElementById('menuTabs');
+  const grids = document.getElementById('menuGrids');
+  tabs.innerHTML = ''; grids.innerHTML = '';
+  CAT_O.filter(c => dishes.some(d => d.cat === c)).forEach((cat, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab' + (i === 0 ? ' on' : '');
+    btn.textContent = CAT_N[cat];
+    btn.onclick = () => {
+      document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
+      btn.classList.add('on');
+      document.querySelectorAll('.mgrid').forEach(g => g.classList.remove('on'));
+      document.getElementById('mg-'+cat).classList.add('on');
+    };
+    tabs.appendChild(btn);
+    const grid = document.createElement('div');
+    grid.className = 'mgrid' + (i === 0 ? ' on' : '');
+    grid.id = 'mg-' + cat;
+    dishes.filter(d => d.cat === cat).forEach(dish => {
+      const card = document.createElement('div');
+      card.className = 'mitem';
+      card.innerHTML = `
+        ${dish.tag ? `<div class="itag">${dish.tag==='Vegano'?'🌱 ':dish.tag==='Vegetariano'?'🥗 ':''}${dish.tag}</div>` : '<div style="height:4px"></div>'}
+        <h3 class="inm">${dish.name}</h3>
+        ${dish.desc ? `<p class="idsc">${dish.desc}</p>` : '<div style="height:8px"></div>'}
+        <div class="ifoot">
+          <span class="ipr"><sup>R$</sup>${dish.price}</span>
+          <button class="badd" id="ba-${dish.id}">Adicionar</button>
+        </div>`;
+      card.onclick = () => addItem(dish);
+      card.querySelector('.badd').onclick = e => { e.stopPropagation(); addItem(dish); };
+      grid.appendChild(card);
+    });
+    grids.appendChild(grid);
+  });
+}
+
+/* ========== PDD ========== */
+function renderPDD() {
+  const b = document.getElementById('pddBanner');
+  if (!pddDish) { b.classList.add('hidden'); return; }
+  b.classList.remove('hidden');
+  document.getElementById('pddNm').textContent = pddDish.name;
+  document.getElementById('pddPr').textContent = 'R$ ' + pddDish.price;
+  document.getElementById('pddAddBtn').onclick = () => addItem(pddDish);
+}
+
+/* ========== CART ========== */
+function addItem(dish) {
+  const ex = cart.find(i => i.id === dish.id);
+  if (ex) ex.qty++; else cart.push({...dish, qty:1});
+  renderCart(); showToast(dish.name + ' adicionado!');
+  const btn = document.getElementById('ba-' + dish.id);
+  if (btn) { btn.textContent = '✓ Adicionado'; btn.classList.add('on'); }
+  updBadge();
+}
+function updBadge() {
+  const t = cart.reduce((s,i) => s+i.qty, 0);
+  const b = document.getElementById('cbadge');
+  b.textContent = t; b.style.display = t > 0 ? 'flex' : 'none';
+}
+function renderCart() {
+  const c = document.getElementById('opItems');
+  const e = document.getElementById('opEmpty');
+  const s = document.getElementById('bsend');
+  c.innerHTML = '';
+  if (!cart.length) {
+    e.style.display = 'block'; s.disabled = true;
+    s.classList.remove('wa'); s.textContent = 'Confirmar Pedido';
+    document.getElementById('totV').textContent = 'R$ 0'; return;
+  }
+  e.style.display = 'none'; s.disabled = false; updSendBtn();
+  let total = 0;
+  cart.forEach((item, idx) => {
+    total += item.price * item.qty;
+    const row = document.createElement('div');
+    row.className = 'orow';
+    row.innerHTML = `<div class="oi"><p class="oin">${item.name}</p><p class="oip">R$ ${item.price} · un.</p></div>
+    <div class="oqty">
+      <button class="qb" onclick="chgQty(${idx},-1)">−</button>
+      <span class="qv">${item.qty}</span>
+      <button class="qb" onclick="chgQty(${idx},1)">+</button>
+    </div>`;
+    c.appendChild(row);
+  });
+  document.getElementById('totV').textContent = 'R$ ' + total.toLocaleString('pt-BR');
+}
+function updSendBtn() {
+  const s = document.getElementById('bsend');
+  if (selCh === 'whatsapp') { s.textContent = '💬 Enviar pelo WhatsApp'; s.classList.add('wa'); }
+  else { s.textContent = 'Confirmar Pedido'; s.classList.remove('wa'); }
+}
+window.chgQty = (idx, delta) => {
+  cart[idx].qty += delta;
+  if (cart[idx].qty <= 0) {
+    const id = cart[idx].id; cart.splice(idx, 1);
+    const b = document.getElementById('ba-' + id);
+    if (b) { b.textContent = 'Adicionar'; b.classList.remove('on'); }
+  }
+  renderCart(); updBadge();
+};
+window.selectChannel = (ch, btn) => {
+  selCh = ch;
+  document.querySelectorAll('.chb').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on'); updSendBtn();
+};
+window.openPanel = () => { document.getElementById('opanel').classList.add('on'); document.getElementById('overlay').classList.add('on'); };
+window.closePanel = () => { document.getElementById('opanel').classList.remove('on'); document.getElementById('overlay').classList.remove('on'); };
+
+function buildChannels() {
+  const grid = document.getElementById('chsGrid');
+  grid.innerHTML = '';
+  const chs = [
+    {id:'tablet', label:'Tablet Mesa', icon:'<svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="16" height="20" rx="2"/><circle cx="12" cy="18" r="1"/></svg>'},
+    {id:'pos', label:'POS', icon:'<svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8M12 17v4"/></svg>'},
+    {id:'email', label:'E-mail', icon:'<svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>'},
+  ];
+  if (cfg.waEnabled && cfg.waNumber) {
+    chs.push({id:'whatsapp', label:'WhatsApp', isWA:true, icon:'<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>'});
+  }
+  grid.style.gridTemplateColumns = chs.length === 4 ? 'repeat(2,1fr)' : 'repeat(3,1fr)';
+  chs.forEach((ch, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'chb' + (i===0?' on':'') + (ch.isWA?' wa':'');
+    btn.id = 'ch-' + ch.id;
+    btn.innerHTML = ch.icon + ch.label;
+    btn.onclick = () => window.selectChannel(ch.id, btn);
+    grid.appendChild(btn);
+  });
+  selCh = 'tablet'; updSendBtn();
+}
+
+function buildWAMsg(table) {
+  const total = cart.reduce((s,i) => s+(i.price*i.qty), 0);
+  let msg = `🌿 *${cfg.nome||'Canto Verde Bistrô'}*\n📋 *Novo Pedido*\n👤 *Mesa/Nome:* ${table}\n\n*Itens:*\n`;
+  cart.forEach(i => { msg += `• ${i.qty}x ${i.name} — R$ ${(i.price*i.qty).toLocaleString('pt-BR')}\n`; });
+  msg += `\n💰 *Total: R$ ${total.toLocaleString('pt-BR')}*`;
+  return encodeURIComponent(msg);
+}
+
+window.sendOrder = async () => {
+  const table = document.getElementById('tblInput').value.trim() || 'Mesa ?';
+  const total = cart.reduce((s,i) => s+(i.price*i.qty), 0);
+  const chN = { tablet:'Tablet Mesa', pos:'Sistema POS', email:'E-mail', whatsapp:'WhatsApp' };
+
+  if (selCh === 'whatsapp') {
+    window.open(`https://wa.me/${cfg.waNumber}?text=${buildWAMsg(table)}`, '_blank');
+    closePanel();
+    showModal('💬','WhatsApp Aberto!',`Pedido montado! Envie a mensagem no WhatsApp, ${table}.`);
+    resetCart(); return;
+  }
+
+  const btn = document.getElementById('bsend');
+  btn.textContent = 'Enviando...'; btn.disabled = true;
+  try {
+    await addDoc(collection(db,'pedidos'), {
+      table, items: cart.map(i=>({id:i.id,name:i.name,price:i.price,qty:i.qty})),
+      total, channel: chN[selCh], status: 'novo', createdAt: serverTimestamp()
+    });
+    closePanel();
+    showModal('✅','Pedido Enviado!',`Pedido via ${chN[selCh]} confirmado, ${table}!`);
+    resetCart();
+  } catch(err) {
+    showModal('❌','Erro ao Enviar', err.code+': '+err.message);
+  }
+  btn.textContent = 'Confirmar Pedido'; btn.disabled = false;
+};
+
+function resetCart() {
+  cart = [];
+  dishes.forEach(d => { const b=document.getElementById('ba-'+d.id); if(b){b.textContent='Adicionar';b.classList.remove('on');} });
+  renderCart(); updBadge();
+  document.getElementById('tblInput').value = '';
+}
+function showModal(ico, ttl, tx) {
+  document.getElementById('mIco').textContent = ico;
+  document.getElementById('mTtl').textContent = ttl;
+  document.getElementById('mTx').textContent = tx;
+  document.getElementById('modal').classList.add('on');
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('on');
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 2400);
+}
+
+/* ========== ADMIN TABS ========== */
+window.aTab = (tab, btn) => {
+  document.querySelectorAll('.atab').forEach(b => b.classList.remove('on'));
+  document.querySelectorAll('.apanel').forEach(p => p.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('ap-'+tab).classList.add('on');
+  if (tab === 'dishes') renderDishes();
+  if (tab === 'stats') renderStats();
+};
+
+/* ========== ORDERS ========== */
+window.fOrders = (f, btn) => {
+  currentFilter = f;
+  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on'); renderOrders();
+};
+function renderOrders() {
+  const list = document.getElementById('oList');
+  const filtered = currentFilter === 'todos' ? orders : orders.filter(o => o.status === currentFilter);
+  const novos = orders.filter(o => o.status === 'novo').length;
+  document.getElementById('oMeta').textContent = `${orders.length} pedido(s) · ${novos} aguardando`;
+  document.getElementById('aBadge').textContent = novos || '0';
+  if (!filtered.length) {
+    list.innerHTML = `<div class="empty-o"><p>Nenhum pedido${currentFilter!=='todos'?' aqui':' ainda'}</p><p style="font-size:10.5px">${orders.length?'Nenhum nesta categoria':'Os pedidos chegam aqui instantaneamente'}</p></div>`;
+    return;
+  }
+  list.innerHTML = '';
+  filtered.forEach(order => {
+    let ts = '—';
+    if (order.createdAt) { try { const t=order.createdAt.toDate?order.createdAt.toDate():new Date(order.createdAt.seconds*1000); ts=t.getHours().toString().padStart(2,'0')+':'+t.getMinutes().toString().padStart(2,'0'); } catch(e){} }
+    const card = document.createElement('div');
+    card.className = `ocard s-${order.status||'novo'}`;
+    const items = (order.items||[]).map(i=>`<div class="oc-il">${i.qty}× ${i.name} — R$ ${(i.price*i.qty).toLocaleString('pt-BR')}</div>`).join('');
+    const isWA = (order.channel||'').toLowerCase().includes('whatsapp');
+    let acts = '';
+    if (order.status==='novo') acts=`<button class="sbtn sbtn-prep" onclick="setSt('${order.fireId}','prep')">Em Preparo</button>`;
+    if (order.status==='prep') acts=`<button class="sbtn sbtn-rdy" onclick="setSt('${order.fireId}','pronto')">Pronto ✓</button>`;
+    if (order.status==='pronto') acts=`<button class="sbtn sbtn-dlv" onclick="setSt('${order.fireId}','entregue')">Entregue</button>`;
+    card.innerHTML = `
+      <div class="oc-top">
+        <div><p class="oc-n">${order.table||'?'}</p><p class="oc-t">${ts} · ${order.channel||'—'}</p></div>
+        <div class="oc-r">
+          <span class="stag stag-${order.status||'novo'}">${ST[order.status]||'Novo'}</span>
+          <span class="oc-ch${isWA?' wa':''}">${order.channel||'—'}</span>
+          <button class="sbtn sbtn-del" onclick="delOrder('${order.fireId}')">✕</button>
+        </div>
+      </div>
+      <div class="oc-items">${items||'<p style="color:var(--mu);font-size:12px">Sem itens</p>'}</div>
+      <div class="oc-foot"><span class="oc-tot">R$ ${(order.total||0).toLocaleString('pt-BR')}</span><div class="oc-acts">${acts}</div></div>`;
+    list.appendChild(card);
+  });
+}
+window.setSt = async (fid, status) => { try { await updateDoc(doc(db,'pedidos',fid),{status}); } catch(e) {console.error(e);} };
+window.delOrder = async (fid) => { if (!confirm('Remover pedido?')) return; try { await deleteDoc(doc(db,'pedidos',fid)); } catch(e){console.error(e);} };
+
+/* ========== PDD ADMIN ========== */
+async function setPDD(dish) {
+  dishes.forEach(d => d.pdd = false); dish.pdd = true; pddDish = dish;
+  try { await setDoc(doc(db,'config','pdd'),{active:true,dish:{id:dish.id,name:dish.name,desc:dish.desc||'',price:dish.price,tag:dish.tag||''},updatedAt:serverTimestamp()}); }
+  catch(e){console.error(e);}
+  renderDishes();
+}
+window.clearPDD = async () => {
+  dishes.forEach(d => d.pdd = false); pddDish = null;
+  try { await setDoc(doc(db,'config','pdd'),{active:false,dish:null}); } catch(e){console.error(e);}
+  renderDishes();
+};
+function renderPDDAdm() {
+  const w = document.getElementById('pddAdmWrap');
+  if (!pddDish) { w.innerHTML='<div class="pdd-none">Nenhum prato do dia. Banner não aparece para os clientes.</div>'; return; }
+  w.innerHTML=`<div class="pdd-cur"><span class="pdd-cur-lbl">✦ Ativo no site</span><span class="pdd-cur-nm">${pddDish.name}</span><span class="pdd-cur-pr">R$ ${pddDish.price}</span><button class="btn-clr-pdd" onclick="clearPDD()">Remover</button></div>`;
+}
+
+/* ========== DISHES ========== */
+window.toggleForm = (dish) => {
+  const f = document.getElementById('dform');
+  if (dish) {
+    document.getElementById('dformTtl').textContent = 'Editar Prato';
+    document.getElementById('dNm').value = dish.name;
+    document.getElementById('dCat').value = dish.cat;
+    document.getElementById('dPr').value = dish.price;
+    document.getElementById('dDsc').value = dish.desc||'';
+    document.getElementById('dTag').value = dish.tag||'';
+    editingId = dish.id; f.classList.add('on');
+  } else {
+    if (f.classList.contains('on') && !editingId) { f.classList.remove('on'); }
+    else {
+      document.getElementById('dformTtl').textContent = 'Adicionar Prato';
+      ['dNm','dDsc','dTag'].forEach(id => document.getElementById(id).value='');
+      document.getElementById('dPr').value=''; document.getElementById('dCat').value='entradas';
+      editingId = null; f.classList.add('on');
+    }
+  }
+};
+window.saveDish = () => {
+  const name = document.getElementById('dNm').value.trim();
+  if (!name) { alert('Informe o nome do prato'); return; }
+  const cat=document.getElementById('dCat').value, price=parseFloat(document.getElementById('dPr').value)||0;
+  const desc=document.getElementById('dDsc').value.trim(), tag=document.getElementById('dTag').value.trim();
+  if (editingId) { const d=dishes.find(x=>x.id===editingId); if(d) Object.assign(d,{name,cat,price,desc,tag}); }
+  else dishes.push({id:dishIdCounter++,name,cat,desc,price,tag,pdd:false});
+  editingId=null; document.getElementById('dform').classList.remove('on');
+  renderDishes();
+};
+window.delDish = (id) => {
+  if (!confirm('Remover prato do cardápio?')) return;
+  if (pddDish && pddDish.id===id) window.clearPDD();
+  dishes = dishes.filter(d => d.id!==id); renderDishes();
+};
+function renderDishes() {
+  renderPDDAdm();
+  const grid = document.getElementById('dgrid'); grid.innerHTML='';
+  CAT_O.forEach(cat => {
+    const cd = dishes.filter(d => d.cat===cat); if (!cd.length) return;
+    const h = document.createElement('div'); h.className='dcat-h';
+    h.innerHTML=`<p class="dcat-l">${CAT_N[cat]}</p>`; grid.appendChild(h);
+    cd.forEach(dish => {
+      const card = document.createElement('div'); card.className='dc';
+      card.innerHTML=`
+        ${dish.pdd?'<span class="pdd-chip">✦ Prato do Dia</span>':''}
+        <p class="dc-cat">${CAT_N[dish.cat]}</p>
+        <p class="dc-nm">${dish.name}</p>
+        ${dish.tag?`<p class="dc-tag">${dish.tag}</p>`:''}
+        <p class="dc-dsc">${dish.desc||'—'}</p>
+        <div class="dc-foot">
+          <span class="dc-pr">R$ ${dish.price}</span>
+          <div class="dc-acts">
+            <button class="bpdd${dish.pdd?' on':''}">${dish.pdd?'★':'☆'} Prato do Dia</button>
+            <button class="bedit">Editar</button>
+            <button class="bdel">✕</button>
+          </div>
+        </div>`;
+      card.querySelector('.bpdd').onclick = () => setPDD(dish);
+      card.querySelector('.bedit').onclick = () => window.toggleForm(dish);
+      card.querySelector('.bdel').onclick = () => window.delDish(dish.id);
+      grid.appendChild(card);
+    });
+  });
+}
+
+/* ========== STATS ========== */
+function renderStats() {
+  const t=orders.length, n=orders.filter(o=>['novo','prep','pronto'].includes(o.status)).length;
+  const e=orders.filter(o=>o.status==='entregue').length, f=orders.reduce((s,o)=>s+(o.total||0),0);
+  document.getElementById('s1').textContent=t; document.getElementById('s2').textContent=n;
+  document.getElementById('s3').textContent=e; document.getElementById('s4').textContent='R$'+f.toLocaleString('pt-BR');
+  const now=new Date();
+  document.getElementById('sMeta').textContent=`Atualizado às ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+  const w=document.getElementById('sRecent');
+  if (!orders.length){w.innerHTML='<p style="font-family:Cormorant Garamond,serif;font-style:italic;color:var(--mu);font-size:14px;padding:14px 0">Nenhum pedido ainda.</p>';return;}
+  w.innerHTML=`<p class="atitle" style="font-size:18px;margin-bottom:11px">Últimos <em>Pedidos</em></p>`;
+  orders.slice(0,6).forEach(o=>{
+    const d=document.createElement('div');
+    d.style.cssText='background:var(--cr);border:1px solid var(--bg);padding:11px 15px;margin-bottom:7px;display:flex;align-items:center;justify-content:space-between;gap:9px;flex-wrap:wrap';
+    d.innerHTML=`<span style="font-family:Cinzel,serif;font-size:11px;color:var(--g)">${o.table||'?'}</span><span class="stag stag-${o.status||'novo'}">${ST[o.status]||'Novo'}</span><span style="font-family:Cormorant Garamond,serif;font-size:18px;color:var(--gd);font-weight:500">R$ ${(o.total||0).toLocaleString('pt-BR')}</span>`;
+    w.appendChild(d);
+  });
+}
+
+/* ========== CONFIG ========== */
+async function loadCfg() {
+  try {
+    const snap = await getDoc(doc(db,'config','settings'));
+    if (snap.exists()) {
+      const d = snap.data();
+      Object.assign(cfg, d);
+      document.getElementById('cfgWA').value = d.waNumber||'';
+      document.getElementById('cfgNome').value = d.nome||'Canto Verde Bistrô';
+      document.getElementById('cfgEnd').value = d.endereco||'Av. Paraná, 1050 · Loanda PR';
+      document.getElementById('cfgHor').value = d.horario||'Terça a Sábado';
+      document.getElementById('cfgInsta').value = d.instagram||'@cantoverdebistro';
+      document.getElementById('cfgAviso').value = d.avisoTexto||'';
+      waOn = d.waEnabled||false; avisoOn = d.avisoEnabled||false;
+      updToggle('togWA','togWALbl',waOn);
+      updToggle('togAviso','togAvisoLbl',avisoOn);
+      updWAPrev();
+    }
+  } catch(e){console.error('loadCfg:',e);}
+}
+function updToggle(trackId, lblId, val) {
+  const track=document.getElementById(trackId), lbl=document.getElementById(lblId);
+  if (val){track.classList.add('on');lbl.textContent='Ativado';}
+  else{track.classList.remove('on');lbl.textContent='Desativado';}
+}
+function updWAPrev() {
+  const num=document.getElementById('cfgWA').value.trim();
+  const prev=document.getElementById('waPrev'), link=document.getElementById('waLink');
+  if(num){prev.style.display='block';link.textContent=`wa.me/${num}`;}
+  else prev.style.display='none';
+}
+document.getElementById('cfgWA').addEventListener('input', updWAPrev);
+window.togWA = () => { waOn=!waOn; updToggle('togWA','togWALbl',waOn); };
+window.togAviso = () => { avisoOn=!avisoOn; updToggle('togAviso','togAvisoLbl',avisoOn); };
+
+window.saveCfg = async (section) => {
+  try {
+    const snap=await getDoc(doc(db,'config','settings'));
+    const data={...(snap.exists()?snap.data():{})};
+    if(section==='wa'){
+      data.waNumber=document.getElementById('cfgWA').value.trim().replace(/\D/g,'');
+      data.waEnabled=waOn; showOk('okWA');
+    }
+    if(section==='rest'){
+      data.nome=document.getElementById('cfgNome').value.trim();
+      data.endereco=document.getElementById('cfgEnd').value.trim();
+      data.horario=document.getElementById('cfgHor').value.trim();
+      data.instagram=document.getElementById('cfgInsta').value.trim();
+      showOk('okRest');
+    }
+    if(section==='aviso'){
+      data.avisoTexto=document.getElementById('cfgAviso').value.trim();
+      data.avisoEnabled=avisoOn; showOk('okAviso');
+    }
+    data.updatedAt=serverTimestamp();
+    await setDoc(doc(db,'config','settings'),data);
+    updWAPrev();
+  } catch(e){alert('Erro ao salvar: '+e.message);}
+};
+function showOk(id){const el=document.getElementById(id);el.classList.add('on');setTimeout(()=>el.classList.remove('on'),3000);}
+
+/* ========== INIT ========== */
+showClient();
+
+// Realtime listeners (client-side, sem auth)
+// PDD e settings já estão conectados via onSnapshot acima
+</script>
+</body>
+</html>
